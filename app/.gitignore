@@ -1,0 +1,42 @@
+# Android Studio
+.idea/
+*.iml
+
+# Build files
+/build/
+*/build/
+
+# Local config
+local.properties
+
+# Kotlin/Java build
+*.class
+*.jar
+*.war
+*.ear
+
+# Compiled bytecode
+*.dex
+
+# Signing files
+*.jks
+*.keystore
+
+# APKs
+*.apk
+*.ap_
+*.aab
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Compose preview
+*.preview
+
+# Crashlytics
+crashlytics-build.properties
+/build
