@@ -43,48 +43,5 @@ import com.example.testapp.viewmodel.TodoViewModel
         }
 
     }
-@Preview(showBackground = true, showSystemUi = true)
 
-@Composable
-fun TodoListScreen(todoViewModel: TodoViewModel = viewModel()) {
-    val todos by todoViewModel.todoList.collectAsState()
-
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        var topText by remember { mutableStateOf("to do list title") }
-        Text(text = topText, modifier = Modifier.padding(bottom = 8.dp))
-
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(todos) { todo ->
-                Card {
-                    Row {
-
-                        Column(modifier = Modifier.weight(4F)) {
-                            Text(text = buildAnnotatedString { withStyle (style = SpanStyle(fontWeight = FontWeight.Bold)){
-                                append("ID") }
-                                append(": ${todo.id}")}, modifier = Modifier.padding(start = 8.dp))
-                            Text(text = buildAnnotatedString { withStyle (style = SpanStyle(fontWeight = FontWeight.Bold)){
-                                append("Title") }
-                                append(": ${todo.title}")}, modifier = Modifier.padding(start = 8.dp))
-                            Text(text = buildAnnotatedString { withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
-                                append("Completed") }
-                                append(": ${if (todo.completed) "Yes" else "No"}")}, modifier = Modifier.padding(start = 8.dp))
-
-                        }
-
-                        Button(
-                            onClick = { topText = todo.title },
-                            modifier = Modifier.weight(2F).align(Alignment.CenterVertically)
-                        ) {
-                            Text(text = "show")
-                        }
-                    }
-                }
-                    Spacer(modifier = Modifier.height(8.dp))
-
-            }
-        }
-    }
-}
 
