@@ -17,7 +17,7 @@ fun TodoNavigation() {
         }
         composable(route= "todoDetail/{title}") { backStackEntry ->
             val title = backStackEntry.arguments?.getString("title")
-            TodoDetailScreen(title = title ?: "No Title")
+            TodoDetailScreen(navController ,title = title ?: "No Title")
         }
 
     }
