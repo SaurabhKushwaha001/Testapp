@@ -46,7 +46,7 @@ fun TodoHomeScreen(navController: NavController, todoViewModel: TodoViewModel = 
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             items(todos) { todo ->
-                val isChecked by todoViewModel.getCompletedState(todo.id).collectAsState(initial = todo.completed)
+                var isChecked by remember(todo.id) { mutableStateOf(todo.completed) }
                 Card(modifier = Modifier.fillMaxWidth()
                     .padding(8.dp)
                     .clickable {navController.navigate(route = "todoDetail/${todo.title}") })
@@ -77,7 +77,8 @@ fun TodoHomeScreen(navController: NavController, todoViewModel: TodoViewModel = 
                             .weight(1f),
                             checked = isChecked,
                             onCheckedChange = { newValue ->
-                                todoViewModel.setCompletedState(todo.id, newValue) }
+                                isChecked = newValue
+                                todoViewModel.updateCompleted(todo.id,newValue) }
                         )
                     }
                 }
