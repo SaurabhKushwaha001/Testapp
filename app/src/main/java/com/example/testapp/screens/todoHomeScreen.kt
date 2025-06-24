@@ -39,7 +39,7 @@ fun TodoHomeScreen(navController: NavController, todoViewModel: TodoViewModel = 
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)) {
-        var topText by remember { mutableStateOf("to do list title") }
+        var topText by remember { mutableStateOf("to do list") }
         Text(text = topText, modifier = Modifier.padding(bottom = 8.dp, top = 15.dp).align (Alignment.CenterHorizontally), style = MaterialTheme.typography.headlineMedium)
 
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
