@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -40,6 +41,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.crashlytics.buildtools)
     val nav_version = "2.9.0"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
@@ -71,5 +74,7 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.compose.material:material-icons-extended")
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.0-beta01")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.1")
 
 }
