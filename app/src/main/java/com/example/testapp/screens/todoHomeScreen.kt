@@ -57,8 +57,10 @@ fun TodoHomeScreen(navController: NavController, todoViewModel: TodoViewModel = 
 
             IconButton(onClick = {
                 navController.navigate("profile")
-            }) {
-                Image(painter = painterResource(id = R.drawable.account), contentDescription = "profile", modifier = Modifier.weight(2f).size(20.dp))
+            }, modifier = Modifier.padding(bottom = 8.dp, top = 9.dp)) {
+                Image(painter = painterResource(id = R.drawable.account),
+                    contentDescription = "profile",
+                    modifier = Modifier.weight(2f).size(35.dp))
             }
             Text(text ="To Do List",
                 modifier = Modifier.padding(bottom = 8.dp, top = 15.dp).

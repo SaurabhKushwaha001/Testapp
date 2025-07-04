@@ -25,12 +25,13 @@ fun TodoDetailScreen(navController: NavController, title: String) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 30.dp),
+            .padding(top = 38.dp, start = 10.dp),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
         IconButton(onClick = {navController.popBackStack()}) {
-            Icon(painter = painterResource(id = R.drawable.baseline_arrow_back_24), contentDescription = "Back")
+            Icon(painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                contentDescription = "Back")
         }
     }
 

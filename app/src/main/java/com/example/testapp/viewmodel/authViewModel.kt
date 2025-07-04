@@ -20,11 +20,12 @@ class AuthViewModel : ViewModel(){
             _authState.value = AuthState.Authenticated
         }
     }
-    fun signIn(email: String , password : String){
+    fun signUp(email: String , password : String){
         if (email.isEmpty() || password.isEmpty()){
             _authState.value = AuthState.Error("Invalid email or password")
             return
         }
+        _authState.value = AuthState.Loading
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener{ task->
                 if(task.isSuccessful){
@@ -41,6 +42,7 @@ class AuthViewModel : ViewModel(){
             _authState.value = AuthState.Error("Invalid email or password")
             return
         }
+        _authState.value = AuthState.Loading
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener{ task->
                 if(task.isSuccessful){
@@ -56,7 +58,15 @@ class AuthViewModel : ViewModel(){
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
     }
+    fun afterErrorState(){
+        if (_authState.value is AuthState.Error){
+            if(auth.currentUser == null){
+                _authState.value = AuthState.Unauthenticated
+            }
+        }
+    }
 }
+
 
 sealed class AuthState{
     object Authenticated : AuthState()

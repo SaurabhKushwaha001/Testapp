@@ -1,5 +1,7 @@
 package com.example.testapp.screens
 import android.widget.Toast
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.KeyboardType
 import com.example.testapp.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,6 +32,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.testapp.viewmodel.AuthState
 import com.example.testapp.viewmodel.AuthViewModel
+import com.google.firebase.auth.FirebaseAuth
+
 @Composable
 fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
@@ -37,8 +42,19 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     LaunchedEffect(authState.value) {
         when(authState.value) {
-            is AuthState.Authenticated -> navController.navigate("todo_HomeScreen")
-            is AuthState.Error ->  Toast.makeText(context, (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
+            is AuthState.Authenticated -> navController.navigate("todo_HomeScreen"){
+                launchSingleTop = true
+                popUpTo(0)
+            }
+            is AuthState.Error -> {
+                Toast.makeText(
+                    context,
+                    (authState.value as AuthState.Error).message,
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                authViewModel.afterErrorState()
+            }
             else -> Unit
         }
     }
@@ -67,13 +83,38 @@ fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("password") })
+            label = { Text("password") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            )
+
         Spacer( modifier = Modifier.height(16.dp))
         Button(onClick = {
             authViewModel.login(email, password)
         }) {
             Text (text = "Login")
         }
+        TextButton(
+            onClick = {
+                if (email.isNotEmpty()) {
+                    FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                Toast.makeText(context, "Password reset email sent.", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Failed to send reset email.", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                } else {
+                    Toast.makeText(context, "Enter your email first.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        ) {
+            Text(text = "Forgot Password?")
+        }
+
+
+
         TextButton(onClick = {navController.navigate("signup")}) {
             Text (text = "Don't have account? Sign Up")
         }

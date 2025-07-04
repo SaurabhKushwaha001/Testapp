@@ -1,5 +1,7 @@
 package com.example.testapp.screens
 import android.widget.Toast
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -37,8 +40,12 @@ fun SignupScreen(navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     LaunchedEffect(authState.value) {
         when (authState.value){
-            is AuthState.Authenticated -> navController.navigate("todo_HomeScreen")
-            is AuthState.Error -> Toast.makeText(context, (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
+            is AuthState.Authenticated -> navController.navigate("todo_HomeScreen") {
+                launchSingleTop = true
+                popUpTo(0)
+            }
+            is AuthState.Error ->{ Toast.makeText(context, (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT).show()
+                authViewModel.afterErrorState()}
             else -> Unit
         }
 
@@ -69,10 +76,13 @@ fun SignupScreen(navController: NavController, authViewModel: AuthViewModel) {
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("password") })
+            label = { Text("password") },
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            )
         Spacer( modifier = Modifier.height(16.dp))
         Button(onClick = {
-            authViewModel.signIn(email, password)
+            authViewModel.signUp(email, password)
         }) {
             Text (text = "SignUp")
         }
