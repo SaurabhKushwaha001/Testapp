@@ -76,5 +76,10 @@ dependencies {
     implementation ("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.7.0-beta01")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2")) // Check for latest BOM
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("io.coil-kt:coil-compose:2.6.0") // For image loading (thumbnails)
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    implementation ("androidx.compose.material3:material3:1.2.1")
 
 }

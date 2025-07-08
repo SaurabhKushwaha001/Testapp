@@ -1,8 +1,11 @@
 package com.example.testapp.ui.theme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.testapp.screens.CourseDetailScreen
+import com.example.testapp.screens.CourseHomeScreen
 import com.example.testapp.screens.LoginScreen
 import com.example.testapp.screens.ProfileScreen
 import com.example.testapp.screens.SignupScreen
@@ -30,7 +33,13 @@ fun TodoNavigation(authViewModel: AuthViewModel) {
         }
         composable (route = "profile"){
             ProfileScreen(authViewModel, navController)
-
+        }
+        composable (route = "CourseHomeScreen"){
+            CourseHomeScreen(navController)
+        }
+        composable(route = "CourseDetail/{playlistId}") { backStackEntry ->
+            val playlistId = backStackEntry.arguments?.getString("playlistId")
+            CourseDetailScreen(navController, playlistId)
         }
     }
 }

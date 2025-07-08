@@ -15,7 +15,6 @@ class MainActivity : ComponentActivity() {
          val authViewModel: AuthViewModel by viewModels()
         setContent {
             TestAppTheme {
-
                 TodoNavigation(authViewModel = authViewModel)
             }
         }

@@ -40,7 +40,7 @@ fun SignupScreen(navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     LaunchedEffect(authState.value) {
         when (authState.value){
-            is AuthState.Authenticated -> navController.navigate("todo_HomeScreen") {
+            is AuthState.Authenticated -> navController.navigate("CourseHomeScreen") {
                 launchSingleTop = true
                 popUpTo(0)
             }
