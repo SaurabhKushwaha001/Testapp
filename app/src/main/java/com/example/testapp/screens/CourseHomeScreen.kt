@@ -1,5 +1,6 @@
 package com.example.testapp.screens
 import android.R.attr.elevation
+import android.R.attr.onClick
 import android.R.attr.shape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,8 +30,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.CheckboxDefaults.colors
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -48,7 +53,17 @@ fun CourseHomeScreen(navController: NavController, viewModel: CourseViewModel = 
         Text (text = "Courses",
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center)
-    }) }) { innerPadding ->
+    },
+        navigationIcon = {
+            IconButton(onClick = {
+                navController.navigate("profile")
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.AccountCircle,
+                    contentDescription = "profile"
+                )
+            }
+        }) }) { innerPadding ->
         LazyColumn(modifier = Modifier
             .padding(8.dp)
             .padding(innerPadding)) {
@@ -58,7 +73,7 @@ fun CourseHomeScreen(navController: NavController, viewModel: CourseViewModel = 
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .clickable {
-                            navController.navigate("courseDetails/${course.playlistId}")
+                            navController.navigate("CourseDetails/${course.playlistId}")
                         },
                             colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
                             shape = RoundedCornerShape(16.dp),

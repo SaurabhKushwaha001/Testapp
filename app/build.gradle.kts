@@ -79,6 +79,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2")) // Check for latest BOM
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("io.coil-kt:coil-compose:2.6.0") // For image loading (thumbnails)
+    implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
+
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation ("androidx.compose.material3:material3:1.2.1")
 

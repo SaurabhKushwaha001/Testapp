@@ -1,12 +1,12 @@
 package com.example.testapp.ui.theme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.testapp.screens.CourseDetailScreen
 import com.example.testapp.screens.CourseHomeScreen
 import com.example.testapp.screens.LoginScreen
+import com.example.testapp.screens.PlayVideoScreen
 import com.example.testapp.screens.ProfileScreen
 import com.example.testapp.screens.SignupScreen
 import com.example.testapp.screens.TodoDetailScreen
@@ -37,9 +37,16 @@ fun TodoNavigation(authViewModel: AuthViewModel) {
         composable (route = "CourseHomeScreen"){
             CourseHomeScreen(navController)
         }
-        composable(route = "CourseDetail/{playlistId}") { backStackEntry ->
+        composable(route = "CourseDetails/{playlistId}") { backStackEntry ->
             val playlistId = backStackEntry.arguments?.getString("playlistId")
             CourseDetailScreen(navController, playlistId)
         }
+        composable("playVideo/{videoId}") { backStackEntry ->
+            val videoId = backStackEntry.arguments?.getString("videoId")
+            videoId?.let {
+                PlayVideoScreen(videoId = it, navController)
+            }
+        }
+
     }
 }
