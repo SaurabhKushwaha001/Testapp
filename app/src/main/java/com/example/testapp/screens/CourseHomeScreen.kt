@@ -1,9 +1,8 @@
 package com.example.testapp.screens
-import android.R.attr.elevation
-import android.R.attr.onClick
-import android.R.attr.shape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
@@ -73,7 +72,7 @@ fun CourseHomeScreen(navController: NavController, viewModel: CourseViewModel = 
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .clickable {
-                            navController.navigate("CourseDetails/${course.playlistId}")
+                            navController.navigate("CourseOverview/${course.playlistId}/${course.title}/${URLEncoder.encode(course.thumbnailUrl, StandardCharsets.UTF_8.toString())}")
                         },
                             colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
                             shape = RoundedCornerShape(16.dp),

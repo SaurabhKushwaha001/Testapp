@@ -5,6 +5,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.testapp.screens.CourseDetailScreen
 import com.example.testapp.screens.CourseHomeScreen
+import com.example.testapp.screens.CourseOverviewScreen
 import com.example.testapp.screens.LoginScreen
 import com.example.testapp.screens.PlayVideoScreen
 import com.example.testapp.screens.ProfileScreen
@@ -37,7 +38,7 @@ fun TodoNavigation(authViewModel: AuthViewModel) {
         composable (route = "CourseHomeScreen"){
             CourseHomeScreen(navController)
         }
-        composable(route = "CourseDetails/{playlistId}") { backStackEntry ->
+        composable(route = "CourseDetail/{playlistId}") { backStackEntry ->
             val playlistId = backStackEntry.arguments?.getString("playlistId")
             CourseDetailScreen(navController, playlistId)
         }
@@ -46,6 +47,20 @@ fun TodoNavigation(authViewModel: AuthViewModel) {
             videoId?.let {
                 PlayVideoScreen(videoId = it, navController)
             }
+        }
+        composable("CourseOverview/{playlistId}/{title}/{thumbnailUrl}") { backStackEntry ->
+            val playlistId = backStackEntry.arguments?.getString("playlistId") ?: ""
+            val title = backStackEntry.arguments?.getString("title") ?: ""
+            val thumbnailUrl = backStackEntry.arguments?.getString("thumbnailUrl") ?: ""
+
+            // URL decode the thumbnail URL
+            val decodedThumbnailUrl = try {
+                java.net.URLDecoder.decode(thumbnailUrl, "UTF-8")
+            } catch (e: Exception) {
+                thumbnailUrl
+            }
+
+            CourseOverviewScreen(navController, playlistId, decodedThumbnailUrl, title, "This is a brief overview.")
         }
 
     }

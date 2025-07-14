@@ -1,5 +1,6 @@
 package com.example.testapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testapp.model.VideoItem
@@ -22,6 +23,7 @@ class CourseDetailViewModel : ViewModel() {
                     playlistId = playlistId,
                     apiKey = apiKey
                 )
+                Log.d("YTApi_Response", response.toString())
                 _videos.value = response.items
             } catch (e: Exception) {
                 e.printStackTrace()

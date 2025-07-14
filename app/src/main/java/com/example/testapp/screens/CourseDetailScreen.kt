@@ -1,5 +1,4 @@
 package com.example.testapp.screens
-import android.R.attr.navigationIcon
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.draw.clip
@@ -57,7 +56,12 @@ fun CourseDetailScreen(
             textAlign = TextAlign.Center) },
         navigationIcon = {
         IconButton(onClick = {
-            navController.popBackStack() // Action to navigate back
+            navController.navigate("CourseHomeScreen"){
+                popUpTo(navController.graph.startDestinationId) { // Pop up to the start destination of the graph
+                    inclusive = true // Also remove the start destination itself from the back stack
+                }
+                launchSingleTop = true // Avoid multiple copies of the home screen on top of each other
+            }
         }) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack, // Use AutoMirrored for RTL support
