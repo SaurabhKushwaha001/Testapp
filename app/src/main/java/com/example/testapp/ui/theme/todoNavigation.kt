@@ -7,6 +7,7 @@ import com.example.testapp.screens.CourseDetailScreen
 import com.example.testapp.screens.CourseHomeScreen
 import com.example.testapp.screens.CourseOverviewScreen
 import com.example.testapp.screens.LoginScreen
+import com.example.testapp.screens.MyCoursesScreen
 import com.example.testapp.screens.PlayVideoScreen
 import com.example.testapp.screens.ProfileScreen
 import com.example.testapp.screens.SignupScreen
@@ -42,12 +43,12 @@ fun TodoNavigation(authViewModel: AuthViewModel) {
             val playlistId = backStackEntry.arguments?.getString("playlistId")
             CourseDetailScreen(navController, playlistId)
         }
-        composable("playVideo/{videoId}") { backStackEntry ->
-            val videoId = backStackEntry.arguments?.getString("videoId")
-            videoId?.let {
-                PlayVideoScreen(videoId = it, navController)
-            }
+        composable("playVideo/{playlistId}/{videoId}") { backStackEntry ->
+            val playlistId = backStackEntry.arguments?.getString("playlistId") ?: ""
+            val videoId = backStackEntry.arguments?.getString("videoId") ?: ""
+            PlayVideoScreen(playlistId, videoId, navController)
         }
+
         composable("CourseOverview/{playlistId}/{title}/{thumbnailUrl}") { backStackEntry ->
             val playlistId = backStackEntry.arguments?.getString("playlistId") ?: ""
             val title = backStackEntry.arguments?.getString("title") ?: ""
@@ -61,6 +62,9 @@ fun TodoNavigation(authViewModel: AuthViewModel) {
             }
 
             CourseOverviewScreen(navController, playlistId, decodedThumbnailUrl, title, "This is a brief overview.")
+        }
+        composable("myCourses") {
+            MyCoursesScreen(navController)
         }
 
     }
