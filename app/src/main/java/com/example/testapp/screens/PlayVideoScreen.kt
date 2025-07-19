@@ -13,29 +13,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.testapp.viewmodel.CourseProgressViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-fun PlayVideoScreen(videoId: String, navController: NavController) {
+fun PlayVideoScreen(playlistId: String, videoId: String, navController: NavController) {
+    val viewModel: CourseProgressViewModel = viewModel()
     val videoUrl = "https://www.youtube.com/embed/$videoId"
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Watch Video",
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center) },
-        navigationIcon = {
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                  imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back"
-                )
-            }})}) { paddingValues ->
+    // Mark video as watched
+    LaunchedEffect(videoId) {
+        viewModel.markVideoWatched(playlistId, videoId)
+    }
+
+    Scaffold(topBar = {
+        TopAppBar(
+            title = { Text("Watch Video") },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                }
+            }
+        )
+    }) { padding ->
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(padding)
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
@@ -44,26 +50,17 @@ fun PlayVideoScreen(videoId: String, navController: NavController) {
                     WebView(context).apply {
                         layoutParams = android.view.ViewGroup.LayoutParams(
                             android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                            600 // fixed height for video player
+                            600
                         )
                         webViewClient = WebViewClient()
                         settings.javaScriptEnabled = true
                         settings.domStorageEnabled = true
-                        settings.loadWithOverviewMode = true
-                        settings.useWideViewPort = true
                         loadUrl(videoUrl)
                     }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(250.dp) // proper height to ensure video is visible
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = "",
-                style = MaterialTheme.typography.bodyMedium
+                    .height(250.dp)
             )
         }
     }

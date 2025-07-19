@@ -40,19 +40,21 @@ fun CourseOverviewScreen(
 ) {
     val context = LocalContext.current
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Course Videos",
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center) },
-        navigationIcon = {
-            IconButton(onClick = {
-                navController.popBackStack()
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Close,
-                    contentDescription = "Close"
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    "Course Overview",
+                    modifier = Modifier.fillMaxWidth(),
                 )
+            },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = Icons.Filled.Close, contentDescription = "Close")
+                }
             }
-        }) }){ paddingValues ->
+        )
+    }) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -78,16 +80,12 @@ fun CourseOverviewScreen(
             Button(
                 onClick = {
                     viewModel.startCourse(playlistId, title, thumbnailUrl)
-                    navController.navigate("CourseDetail/$playlistId")
+                    navController.navigate("courseDetail/$playlistId")
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Start Course")
             }
-
         }
-
     }
 }
-
-

@@ -52,19 +52,18 @@ fun CourseDetailScreen(
     }
 
     Scaffold(topBar = { TopAppBar(title = { Text("Course Videos",
-        modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center) },
+        modifier = Modifier.fillMaxWidth(),) },
         navigationIcon = {
         IconButton(onClick = {
             navController.navigate("CourseHomeScreen"){
-                popUpTo(navController.graph.startDestinationId) { // Pop up to the start destination of the graph
-                    inclusive = true // Also remove the start destination itself from the back stack
+                popUpTo(navController.graph.startDestinationId) {
+                    inclusive = true
                 }
-                launchSingleTop = true // Avoid multiple copies of the home screen on top of each other
+                launchSingleTop = true
             }
         }) {
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack, // Use AutoMirrored for RTL support
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                 contentDescription = "Back"
             )
         }
@@ -79,10 +78,10 @@ fun CourseDetailScreen(
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
                         .clickable {
-                            navController.navigate("playVideo/${video.contentDetails.videoId}")
+                            navController.navigate("playVideo/${playlistId}/${video.contentDetails.videoId}")
                         },
                     shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFFF5F5F5)
                     )
