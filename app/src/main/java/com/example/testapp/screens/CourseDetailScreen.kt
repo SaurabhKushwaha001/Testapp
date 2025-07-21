@@ -46,33 +46,45 @@ fun CourseDetailScreen(
     viewModel: CourseDetailViewModel = viewModel()
 ) {
     val videos by viewModel.videos.collectAsState()
+    val watchedVideos by viewModel.watchedVideos.collectAsState()
 
     LaunchedEffect(playlistId) {
         playlistId?.let { viewModel.fetchVideos(it) }
     }
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Course Videos",
-        modifier = Modifier.fillMaxWidth(),) },
-        navigationIcon = {
-        IconButton(onClick = {
-            navController.navigate("CourseHomeScreen"){
-                popUpTo(navController.graph.startDestinationId) {
-                    inclusive = true
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    "Course Videos",
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = {
+                    navController.navigate("CourseHomeScreen") {
+                        popUpTo(navController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
                 }
-                launchSingleTop = true
             }
-        }) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back"
-            )
-        }
-    }) }) {innerPadding->
-        LazyColumn(modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .padding(innerPadding)
+        )
+    }) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(innerPadding)
         ) {
             items(videos) { video ->
+                val isWatched = watchedVideos.contains(video.contentDetails.videoId)
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -83,26 +95,42 @@ fun CourseDetailScreen(
                     shape = RoundedCornerShape(16.dp),
                     elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = Color(0xFFF5F5F5)
+                        containerColor = if (isWatched) Color(0xFFE8F5E8) else Color(0xFFF5F5F5)
                     )
                 ) {
-                    Row(modifier = Modifier.padding(12.dp)) {
-                        Image(
-                            painter = rememberAsyncImagePainter(video.snippet.thumbnails.medium.url),
-                            contentDescription = "Video Thumbnail",
-                            modifier = Modifier
-                                .size(100.dp)
-                                .clip(RoundedCornerShape(12.dp))
-                        )
-                        Spacer(modifier = Modifier.width(12.dp))
+                    Box {
+                        Row(modifier = Modifier.padding(12.dp)) {
+                            Image(
+                                painter = rememberAsyncImagePainter(video.snippet.thumbnails.medium.url),
+                                contentDescription = "Video Thumbnail",
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .clip(RoundedCornerShape(12.dp))
+                            )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = video.snippet.title,
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 16.sp
+                                ),
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                                    .padding(end = 60.dp) // Make space for the status text
+                            )
+                        }
+
+                        // Status indicator in top-right corner
                         Text(
-                            text = video.snippet.title,
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp
+                            text = if (isWatched) "Watched" else "Unwatched",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Medium
                             ),
+                            color = if (isWatched) Color(0xFF4CAF50) else Color.Gray,
                             modifier = Modifier
-                                .align(Alignment.CenterVertically)
+                                .align(Alignment.TopEnd)
+                                .padding(8.dp)
                         )
                     }
                 }
