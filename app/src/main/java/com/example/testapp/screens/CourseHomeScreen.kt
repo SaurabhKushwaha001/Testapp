@@ -50,10 +50,9 @@ fun CourseHomeScreen(navController: NavController, viewModel: CourseViewModel = 
     val courses by viewModel.courses.collectAsState()
     Scaffold(topBar = { TopAppBar(title = {
         Text (text = "Courses",
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center)
+        modifier = Modifier.fillMaxWidth())
     },
-        navigationIcon = {
+        action = {
             IconButton(onClick = {
                 navController.navigate("profile")
             }) {
