@@ -35,8 +35,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.activity.compose.BackHandler
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +65,7 @@ fun CourseDetailScreen(
             navigationIcon = {
                 IconButton(onClick = {
                     navController.navigate("CourseHomeScreen") {
-                        popUpTo(navController.graph.startDestinationId) {
+                        popUpTo(0) {
                             inclusive = true
                         }
                         launchSingleTop = true
@@ -74,6 +75,12 @@ fun CourseDetailScreen(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back"
                     )
+                }
+                BackHandler {
+                    navController.navigate("CourseHomeScreen") {
+                        popUpTo(0) { inclusive = true }
+                        launchSingleTop = true
+                    }
                 }
             },
             modifier = Modifier.shadow(8.dp)
