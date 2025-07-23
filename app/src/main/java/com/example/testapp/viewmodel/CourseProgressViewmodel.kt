@@ -30,6 +30,9 @@ class CourseProgressViewModel : ViewModel() {
     private val _myCourses = MutableStateFlow<List<MyCourseProgress>>(emptyList())
     val myCourses: StateFlow<List<MyCourseProgress>> = _myCourses
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
     // Check if course already exists
     suspend fun isCourseAlreadyStarted(playlistId: String): Boolean {
         val userId = auth.currentUser?.uid ?: return false
@@ -95,6 +98,7 @@ class CourseProgressViewModel : ViewModel() {
 
     // Fetch Courses with Progress
     fun fetchMyCoursesWithProgress() {
+        _isLoading.value= true
         val userId = auth.currentUser?.uid ?: return
 
         viewModelScope.launch {
@@ -129,8 +133,11 @@ class CourseProgressViewModel : ViewModel() {
                     )
                 }
                 _myCourses.value = coursesList
+                _isLoading.value = false
+
             } catch (e: Exception) {
                 e.printStackTrace()
+                _isLoading.value = false
             }
         }
     }
