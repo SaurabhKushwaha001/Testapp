@@ -2,11 +2,14 @@ package com.example.testapp.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -16,6 +19,7 @@ import com.example.testapp.R
 import com.example.testapp.viewmodel.AuthState
 import com.example.testapp.viewmodel.AuthViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(authViewModel: AuthViewModel, navController: NavController) {
 
@@ -27,40 +31,42 @@ fun ProfileScreen(authViewModel: AuthViewModel, navController: NavController) {
             else -> Unit
         }
     }
-
-    Column(
-        modifier = Modifier
-            .padding(top = 38.dp, start = 10.dp)
-            .fillMaxWidth()
-    ) {
-        IconButton(onClick = { navController.popBackStack() }) {
-            Icon(
-                painter = painterResource(id = R.drawable.baseline_arrow_back_24),
-                contentDescription = "Back"
-            )
-        }
+    Scaffold(topBar = {
+        TopAppBar(
+            title = {
+                Text(
+                    "Menu",
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_arrow_back_24),
+                        contentDescription = "Back"
+                    )
+                }
+            },
+            modifier = Modifier.shadow(8.dp)
+        )
+    }) { innerPadding ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .padding(innerPadding),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
-            Text(text = "Profile", fontSize = 32.sp, fontWeight = FontWeight.Bold)
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // ✅ My Courses Option
             ProfileOption(
                 title = "My Courses",
                 description = "View your progress",
                 onClick = { navController.navigate("myCourses") }
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(5.dp))
 
-            // ✅ All Courses Option
             ProfileOption(
                 title = "All Courses",
                 description = "Browse all courses",

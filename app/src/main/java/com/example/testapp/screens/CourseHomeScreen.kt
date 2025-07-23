@@ -6,7 +6,11 @@ import java.nio.charset.StandardCharsets
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import android.annotation.SuppressLint
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -28,19 +32,14 @@ import com.example.testapp.viewmodel.CourseViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material3.CheckboxDefaults.colors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,20 +47,28 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun CourseHomeScreen(navController: NavController, viewModel: CourseViewModel = viewModel()) {
     val courses by viewModel.courses.collectAsState()
-    Scaffold(topBar = { TopAppBar(title = {
-        Text (text = "Courses",
-        modifier = Modifier.fillMaxWidth())
-    },
-        action = {
-            IconButton(onClick = {
-                navController.navigate("profile")
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.AccountCircle,
-                    contentDescription = "profile"
-                )
-            }
-        }) }) { innerPadding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = "Courses",
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigate("profile")
+                    }) {
+                        Icon(
+                            imageVector = Icons.Filled.Menu,
+                            contentDescription = "Menu"
+                        )
+                    }
+                },
+                modifier = Modifier.shadow(8.dp))
+        }
+    ) { innerPadding ->
         LazyColumn(modifier = Modifier
             .padding(8.dp)
             .padding(innerPadding)) {

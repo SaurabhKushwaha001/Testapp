@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,6 +41,8 @@ import androidx.navigation.NavController
 import com.example.testapp.viewmodel.CourseProgressViewModel
 import com.example.testapp.viewmodel.MyCourseProgress
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,13 +56,15 @@ fun MyCoursesScreen(
         viewModel.fetchMyCoursesWithProgress()
     }
 
-    Scaffold(topBar = { TopAppBar(title = { Text("Course Videos",
-        modifier = Modifier.fillMaxWidth(),) },
-        navigationIcon = {
-            IconButton(onClick = { navController.popBackStack() }) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = "Close")
-            }
-        }) }){ padding ->
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("Course Videos",
+            modifier = Modifier.fillMaxWidth()) },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = Icons.Filled.Close, contentDescription = "Close")
+                }
+            },
+            modifier = Modifier.shadow(8.dp)) }){ padding ->
         if (myCourses.isEmpty()) {
             Box(
                 modifier = Modifier.fillMaxSize().padding(padding),
@@ -86,7 +91,10 @@ fun CourseProgressCard(course: MyCourseProgress, onClick: () -> Unit, onDelete: 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
             Text(text = course.title, fontWeight = FontWeight.Bold)
