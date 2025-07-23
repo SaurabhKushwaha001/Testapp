@@ -35,8 +35,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import androidx.activity.compose.BackHandler
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.sp
 fun CourseDetailScreen(
     navController: NavController,
     playlistId: String?,
+    source: String,
     viewModel: CourseDetailViewModel = viewModel()
 ) {
     val videos by viewModel.videos.collectAsState()
@@ -63,17 +65,33 @@ fun CourseDetailScreen(
             },
             navigationIcon = {
                 IconButton(onClick = {
-                    navController.navigate("CourseHomeScreen") {
-                        popUpTo(navController.graph.startDestinationId) {
-                            inclusive = true
+                    if(source == "courseOverview"){
+                        navController.navigate("CourseHomeScreen") {
+                            popUpTo(0){
+                                inclusive = true
+                            }
+                            launchSingleTop = true
                         }
-                        launchSingleTop = true
+                    }else{
+                        navController.popBackStack()
                     }
                 }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back"
                     )
+                }
+                BackHandler {
+                    if (source == "courseOverview") {
+                        navController.navigate("CourseHomeScreen") {
+                            popUpTo(0){
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }else{
+                        navController.popBackStack()
+                    }
                 }
             },
             modifier = Modifier.shadow(8.dp)

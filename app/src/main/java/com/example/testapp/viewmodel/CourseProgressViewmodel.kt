@@ -30,27 +30,54 @@ class CourseProgressViewModel : ViewModel() {
     private val _myCourses = MutableStateFlow<List<MyCourseProgress>>(emptyList())
     val myCourses: StateFlow<List<MyCourseProgress>> = _myCourses
 
+    // Check if course already exists
+    suspend fun isCourseAlreadyStarted(playlistId: String): Boolean {
+        val userId = auth.currentUser?.uid ?: return false
+        return try {
+            val doc = db.collection("users").document(userId)
+                .collection("myCourses")
+                .document(playlistId)
+                .get()
+                .await()
+            doc.exists()
+        } catch (e: Exception) {
+            Log.e("Course", "Error checking if course exists", e)
+            false
+        }
+    }
+
+
     fun startCourse(playlistId: String, title: String, thumbnailUrl: String) {
         val userId = auth.currentUser?.uid ?: return
-        val startedCourse = hashMapOf(
-            "title" to title,
-            "playlistId" to playlistId,
-            "thumbnailUrl" to thumbnailUrl,
-            "progress" to 0,
-            "watchedVideos" to emptyList<String>()
-        )
 
-        db.collection("users").document(userId)
-            .collection("myCourses")
-            .document(playlistId)
-            .set(startedCourse)
-            .addOnSuccessListener {
+        viewModelScope.launch {
+            // Check if course already exists
+            if (isCourseAlreadyStarted(playlistId)) {
+                Log.d("Course", "Course already started, not creating duplicate")
+                return@launch
+            }
+
+            val startedCourse = hashMapOf(
+                "title" to title,
+                "playlistId" to playlistId,
+                "thumbnailUrl" to thumbnailUrl,
+                "progress" to 0,
+                "watchedVideos" to emptyList<String>()
+            )
+
+            try {
+                db.collection("users").document(userId)
+                    .collection("myCourses")
+                    .document(playlistId)
+                    .set(startedCourse)
+                    .await()
+
                 Log.d("Course", "Started course saved.")
                 fetchMyCoursesWithProgress()
+            } catch (e: Exception) {
+                Log.e("Course", "Failed to save course", e)
             }
-            .addOnFailureListener {
-                Log.e("Course", "Failed to save course", it)
-            }
+        }
     }
 
     // Mark Video Watched

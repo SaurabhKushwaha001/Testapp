@@ -1,5 +1,8 @@
 package com.example.testapp.screens
-
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -18,16 +22,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.testapp.viewmodel.CourseProgressViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,6 +47,14 @@ fun CourseOverviewScreen(
     viewModel: CourseProgressViewModel = viewModel()
 ) {
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    var isCourseStarted by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(playlistId) {
+        isCourseStarted = viewModel.isCourseAlreadyStarted(playlistId)
+        isLoading = false
+    }
 
     Scaffold(topBar = {
         TopAppBar(
@@ -79,14 +94,51 @@ fun CourseOverviewScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
 
-            Button(
-                onClick = {
-                    viewModel.startCourse(playlistId, title, thumbnailUrl)
-                    navController.navigate("courseDetail/$playlistId")
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Start Course")
+            if (isLoading) {
+                Button(
+                    onClick = { },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = false
+                ) {
+                    Text("Loading...")
+                }
+            } else if (isCourseStarted) {
+                // Course already started - show "Continue Course" button
+                Button(
+                    onClick = {
+                        navController.navigate("courseDetail/$playlistId/courseOverview")
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    )
+                ) {
+                    Text("Continue Course")
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedButton(
+                    onClick = {
+                        navController.navigate("myCourses")
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("View My Courses")
+                }
+            } else {
+                // Course not started - show "Start Course" button
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            viewModel.startCourse(playlistId, title, thumbnailUrl)
+                            navController.navigate("courseDetail/$playlistId/courseOverview")
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Start Course")
+                }
             }
         }
     }

@@ -57,7 +57,7 @@ fun MyCoursesScreen(
     }
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Course Videos",
+        topBar = { TopAppBar(title = { Text("Ongoing Courses",
             modifier = Modifier.fillMaxWidth()) },
             navigationIcon = {
                 IconButton(onClick = { navController.popBackStack() }) {
@@ -77,7 +77,7 @@ fun MyCoursesScreen(
                 items(myCourses) { course ->
                     CourseProgressCard(
                         course = course,
-                        onClick = { navController.navigate("CourseDetail/${course.playlistId}") },
+                        onClick = { navController.navigate("CourseDetail/${course.playlistId}/myCourse") },
                         onDelete = { viewModel.deleteCourse(course.playlistId) }
                     )
                 }
