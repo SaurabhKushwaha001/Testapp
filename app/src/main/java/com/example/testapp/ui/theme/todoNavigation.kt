@@ -39,9 +39,13 @@ fun TodoNavigation(authViewModel: AuthViewModel) {
         composable (route = "CourseHomeScreen"){
             CourseHomeScreen(navController)
         }
-        composable(route = "CourseDetail/{playlistId}") { backStackEntry ->
+        composable(route = "CourseDetail/{playlistId}/{source}") { backStackEntry ->
             val playlistId = backStackEntry.arguments?.getString("playlistId")
-            CourseDetailScreen(navController, playlistId)
+            val source = backStackEntry.arguments?.getString("source")
+            if (playlistId != null && source != null) {
+                CourseDetailScreen(navController, playlistId, source)
+            }
+
         }
         composable("playVideo/{playlistId}/{videoId}") { backStackEntry ->
             val playlistId = backStackEntry.arguments?.getString("playlistId") ?: ""

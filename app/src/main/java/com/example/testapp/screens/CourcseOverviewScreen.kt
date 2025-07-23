@@ -106,7 +106,7 @@ fun CourseOverviewScreen(
                 // Course already started - show "Continue Course" button
                 Button(
                     onClick = {
-                        navController.navigate("courseDetail/$playlistId")
+                        navController.navigate("courseDetail/$playlistId/courseOverview")
                     },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
@@ -132,7 +132,7 @@ fun CourseOverviewScreen(
                     onClick = {
                         coroutineScope.launch {
                             viewModel.startCourse(playlistId, title, thumbnailUrl)
-                            navController.navigate("courseDetail/$playlistId")
+                            navController.navigate("courseDetail/$playlistId/courseOverview")
                         }
                     },
                     modifier = Modifier.fillMaxWidth()

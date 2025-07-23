@@ -2,8 +2,6 @@ package com.example.testapp.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -60,7 +58,7 @@ fun ProfileScreen(authViewModel: AuthViewModel, navController: NavController) {
             horizontalAlignment = Alignment.Start
         ) {
             ProfileOption(
-                title = "My Courses",
+                title = "Ongoing Courses",
                 description = "View your progress",
                 onClick = { navController.navigate("myCourses") }
             )

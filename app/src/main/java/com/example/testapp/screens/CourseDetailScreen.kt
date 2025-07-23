@@ -45,6 +45,7 @@ import androidx.activity.compose.BackHandler
 fun CourseDetailScreen(
     navController: NavController,
     playlistId: String?,
+    source: String,
     viewModel: CourseDetailViewModel = viewModel()
 ) {
     val videos by viewModel.videos.collectAsState()
@@ -64,11 +65,15 @@ fun CourseDetailScreen(
             },
             navigationIcon = {
                 IconButton(onClick = {
-                    navController.navigate("CourseHomeScreen") {
-                        popUpTo(0) {
-                            inclusive = true
+                    if(source == "courseOverview"){
+                        navController.navigate("CourseHomeScreen") {
+                            popUpTo(0){
+                                inclusive = true
+                            }
+                            launchSingleTop = true
                         }
-                        launchSingleTop = true
+                    }else{
+                        navController.popBackStack()
                     }
                 }) {
                     Icon(
@@ -77,9 +82,15 @@ fun CourseDetailScreen(
                     )
                 }
                 BackHandler {
-                    navController.navigate("CourseHomeScreen") {
-                        popUpTo(0) { inclusive = true }
-                        launchSingleTop = true
+                    if (source == "courseOverview") {
+                        navController.navigate("CourseHomeScreen") {
+                            popUpTo(0){
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }else{
+                        navController.popBackStack()
                     }
                 }
             },
