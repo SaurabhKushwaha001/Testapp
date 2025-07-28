@@ -1,24 +1,33 @@
 package com.example.testapp.viewmodel
+import android.window.SplashScreen
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class AuthViewModel : ViewModel(){
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
-    private val _authState = MutableLiveData<AuthState>()
-    val authState : LiveData<AuthState> = _authState
+
+    private val _authState = MutableStateFlow<AuthState>(AuthState.Loading)
+    val authState : StateFlow<AuthState> = _authState
 
     init {
+
+        _authState.value = AuthState.Loading
         checkAuthStatus()
+
     }
-    fun checkAuthStatus(){
-        if(auth.currentUser == null){
-            _authState.value = AuthState.Unauthenticated
-        }else{
-            _authState.value = AuthState.Authenticated
-        }
+    fun checkAuthStatus() {
+            _authState.value = if (auth.currentUser != null) {
+                AuthState.Authenticated
+            } else {
+                AuthState.Unauthenticated
+            }
+
     }
     fun signUp(email: String , password : String){
         if (email.isEmpty() || password.isEmpty()){

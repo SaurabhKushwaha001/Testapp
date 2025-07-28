@@ -33,13 +33,15 @@ import androidx.navigation.NavController
 import com.example.testapp.viewmodel.AuthState
 import com.example.testapp.viewmodel.AuthViewModel
 import com.google.firebase.auth.FirebaseAuth
+import androidx.compose.runtime.collectAsState
+
 
 @Composable
 fun LoginScreen(navController: NavController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val authState = authViewModel.authState.observeAsState()
+    val authState = authViewModel.authState.collectAsState()
     LaunchedEffect(authState.value) {
         when(authState.value) {
             is AuthState.Authenticated -> navController.navigate("CourseHomeScreen"){
