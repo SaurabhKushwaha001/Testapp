@@ -1,5 +1,6 @@
 package com.example.testapp.screens
 import android.widget.Toast
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.Image
@@ -37,7 +38,7 @@ fun SignupScreen(navController: NavController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
-    val authState = authViewModel.authState.observeAsState()
+    val authState = authViewModel.authState.collectAsState()
     LaunchedEffect(authState.value) {
         when (authState.value){
             is AuthState.Authenticated -> navController.navigate("CourseHomeScreen") {

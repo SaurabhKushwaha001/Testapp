@@ -1,5 +1,6 @@
 package com.example.testapp.ui.theme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,12 +15,21 @@ import com.example.testapp.screens.SignupScreen
 import com.example.testapp.screens.TodoDetailScreen
 import com.example.testapp.screens.TodoHomeScreen
 import com.example.testapp.viewmodel.AuthViewModel
+import androidx.compose.runtime.getValue
+import com.example.testapp.viewmodel.AuthState
 
 @Composable
 fun TodoNavigation(authViewModel: AuthViewModel) {
 
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "login") {
+    val authState by authViewModel.authState.collectAsState()
+
+    val startDestination = when (authState) {
+        is AuthState.Authenticated -> "CourseHomeScreen"
+        else -> "login"
+    }
+    NavHost(navController = navController, startDestination = startDestination) {
+
         composable(route = "todo_HomeScreen") {
             TodoHomeScreen(navController, authViewModel = authViewModel)
         }

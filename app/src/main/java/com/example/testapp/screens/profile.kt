@@ -21,7 +21,7 @@ import com.example.testapp.viewmodel.AuthViewModel
 @Composable
 fun ProfileScreen(authViewModel: AuthViewModel, navController: NavController) {
 
-    val authState = authViewModel.authState.observeAsState()
+    val authState = authViewModel.authState.collectAsState()
 
     LaunchedEffect(authState.value) {
         when (authState.value) {

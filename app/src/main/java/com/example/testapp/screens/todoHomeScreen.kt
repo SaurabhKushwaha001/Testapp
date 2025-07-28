@@ -41,7 +41,7 @@ import com.example.testapp.viewmodel.TodoViewModel
 @Composable
 fun TodoHomeScreen(navController: NavController, todoViewModel: TodoViewModel = viewModel(), authViewModel: AuthViewModel) {
     val todos by todoViewModel.todoList.collectAsState()
-    val authState = authViewModel.authState.observeAsState()
+    val authState = authViewModel.authState.collectAsState()
     LaunchedEffect(authState.value) {
         when (authState.value){
             is AuthState.Unauthenticated -> navController.navigate("login")
