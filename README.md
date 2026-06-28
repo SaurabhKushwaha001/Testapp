@@ -53,7 +53,7 @@ Follow these steps to set up the project locally.
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/YT-Course-Tracker.git
+git clone https://github.com/SaurabhKushwaha001/YT-cource-tracker.git
 ```
 
 ### 2. Open the Project
@@ -76,6 +76,23 @@ git clone https://github.com/your-username/YT-Course-Tracker.git
 2. Connect a physical Android device or start an emulator.
 3. Click **Run ▶** in Android Studio.
 
+---
+## 📂 Project Structure
+ 
+```
+YT-Course-Tracker/
+├── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/...        # Kotlin source files (MVVM layers)
+│   │   │   ├── res/             # UI resources
+│   │   │   └── AndroidManifest.xml
+│   ├── google-services.json     # Firebase config (not committed)
+│   └── build.gradle
+├── build.gradle
+└── README.md
+```
+ 
 ---
 
 ## 🗺️ Roadmap
